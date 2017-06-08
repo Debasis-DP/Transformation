@@ -1,0 +1,24 @@
+{
+  "Order" : {
+    "Header" : {
+      "Id" : 1,
+      "Price" : 59.97,
+      "CustomerDetails" : {
+        "UserName" : "DP",
+        "FirstName" : "Debasis",
+        "LastName" : "Panda"
+      }
+    },
+    "OrderItems" : [ {
+      "Quantity" : 10,
+      "ProductId" : "364",
+      "Title" : "Pied Piper",
+      "Price" : 29.98
+    }, {
+      "Quantity" : 50,
+      "ProductId" : "299",
+      "Title" : "Inception",
+      "Price" : 29.99
+    } ]
+  }
+}
