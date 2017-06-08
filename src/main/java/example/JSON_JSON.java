@@ -61,10 +61,10 @@ public class JSON_JSON {
         smooks = new Smooks(smooksFile);
     }
     
-    protected String runSmooksTransform(ExecutionContext executionContext,byte[] inputJSON) throws IOException,SAXException, SmooksException{
+    protected String runSmooksTransform(ExecutionContext executionContext) throws IOException,SAXException, SmooksException{
         try{
             StringResult result = new StringResult();
-            smooks.filterSource(executionContext, new StreamSource(new ByteArrayInputStream(inputJSON)), result);
+            smooks.filterSource(executionContext, new StreamSource(new ByteArrayInputStream(JSON_input)), result);
             return result.toString();
         } finally {
             smooks.close();
@@ -73,18 +73,18 @@ public class JSON_JSON {
     }
 
     
-     public static void main(byte[] inputJSON,String intermediateXML_file,String XSLT_file,String smooks_file,String outputJSON_file) throws IOException, SAXException, SmooksException {
-       //JSON_input = readInputMessage(inputJSON_file);
+     public static void main(String inputJSON_file,String intermediateXML_file,String XSLT_file,String smooks_file,String outputJSON_file) throws IOException, SAXException, SmooksException {
+       JSON_input = readInputMessage(inputJSON_file);
        
        System.out.println("_______________________Original JSON file_____________________\n");
-       System.out.println(new String(inputJSON));
+       System.out.println(new String(JSON_input));
        System.out.println("______________________________________________________________\n");
        
        String out_XMLfile = intermediateXML_file;
        
        JSON_JSON mainSmooks = new JSON_JSON(smooks_file);
        ExecutionContext executionContext = mainSmooks.smooks.createExecutionContext();
-       String outXML = mainSmooks.runSmooksTransform(executionContext,inputJSON); //Indented intermediate XML
+       String outXML = mainSmooks.runSmooksTransform(executionContext); //Indented intermediate XML
        String indentedXML = format(outXML);
        
        System.out.println("______________________Intermediate XML______________________________\n");
@@ -127,7 +127,6 @@ public class JSON_JSON {
             StringBuffer sb = writer.getBuffer(); 
             String finalString = sb.toString();
                         
-            
             
             //Indent the output JSON
             ObjectMapper mapper = new ObjectMapper();
@@ -185,7 +184,7 @@ public class JSON_JSON {
             e.printStackTrace();
         
         }
-    } // main1
+    } // main
     
     private static byte[] readInputMessage(String JSON_input_file) {
         try {
@@ -196,10 +195,7 @@ public class JSON_JSON {
         }
     }
     
-   /* public String runSmooksTransform() throws IOException, SAXException {
-        ExecutionContext executionContext = smooks.createExecutionContext();
-        return runSmooksTransform(executionContext);
-    }*/
+  
     private static Document parseXmlFile(String in) {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
