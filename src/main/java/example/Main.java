@@ -23,7 +23,10 @@ public class Main {
         System.out.println("Type entered is : "+type);
         switch(type){
             case "xml":
-                JSON_JSON.main("data/JSON-JSON/inputJSON.jsn","data/JSON-JSON/intermediateXML.xml","data/JSON-JSON/XSLT.xsl","data/JSON-JSON/smooks-config.xml","data/JSON-JSON/outputJSON");
+                String inputJSON_file = "data/JSON-JSON/inputJSON.jsn";
+                String XSLT_file = "data/JSON-JSON/XSLT.xsl";
+                        
+                JSON_JSON.main(inputJSON_file,XSLT_file);
                 break;
             default:
                 System.out.println("Error type!");

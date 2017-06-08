@@ -53,7 +53,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * @author Debasis
  */
 public class JSON_JSON {
-    private static byte[] JSON_input; //Read from input JSON 
+    
     private final Smooks smooks;
     static Document document;
     
@@ -61,7 +61,7 @@ public class JSON_JSON {
         smooks = new Smooks(smooksFile);
     }
     
-    protected String runSmooksTransform(ExecutionContext executionContext) throws IOException,SAXException, SmooksException{
+    protected String runSmooksTransform(ExecutionContext executionContext,byte[] JSON_input) throws IOException,SAXException, SmooksException{
         try{
             StringResult result = new StringResult();
             smooks.filterSource(executionContext, new StreamSource(new ByteArrayInputStream(JSON_input)), result);
@@ -73,18 +73,21 @@ public class JSON_JSON {
     }
 
     
-     public static void main(String inputJSON_file,String intermediateXML_file,String XSLT_file,String smooks_file,String outputJSON_file) throws IOException, SAXException, SmooksException {
-       JSON_input = readInputMessage(inputJSON_file);
+     public static void main(String inputJSON_file,String XSLT_file) throws IOException, SAXException, SmooksException {
+       
+       String intermediateXML_file = "data/JSON-JSON/intermediateXML.xml";
+       String smooks_file = "data/JSON-JSON/smooks-config.xml";
+       String outputJSON_file = "data/JSON-JSON/outputJSON";
+       
+       byte[] JSON_input = readInputMessage(inputJSON_file);
        
        System.out.println("_______________________Original JSON file_____________________\n");
        System.out.println(new String(JSON_input));
        System.out.println("______________________________________________________________\n");
        
-       String out_XMLfile = intermediateXML_file;
-       
        JSON_JSON mainSmooks = new JSON_JSON(smooks_file);
        ExecutionContext executionContext = mainSmooks.smooks.createExecutionContext();
-       String outXML = mainSmooks.runSmooksTransform(executionContext); //Indented intermediate XML
+       String outXML = mainSmooks.runSmooksTransform(executionContext,JSON_input); //Indented intermediate XML
        String indentedXML = format(outXML);
        
        System.out.println("______________________Intermediate XML______________________________\n");
@@ -92,7 +95,7 @@ public class JSON_JSON {
        System.out.println("_______________________________________________________________\n");
        
        try {
-            BufferedWriter bufferedWriter_out = new BufferedWriter( new FileWriter (out_XMLfile));
+            BufferedWriter bufferedWriter_out = new BufferedWriter( new FileWriter (intermediateXML_file));
             bufferedWriter_out.write(indentedXML);
             bufferedWriter_out.close();       
         } catch (IOException e) {
@@ -126,7 +129,11 @@ public class JSON_JSON {
             transformer.transform(source, result);
             StringBuffer sb = writer.getBuffer(); 
             String finalString = sb.toString();
-                        
+            
+            /*=======Unindented JSON=======*/
+            //System.out.println("=======================Output JSON=============================");
+            //System.out.println(finalString);
+            //System.out.println("===============================================================");
             
             //Indent the output JSON
             ObjectMapper mapper = new ObjectMapper();
