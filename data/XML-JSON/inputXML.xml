@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Customers>
+    <Customer Id="99">
+        <Name>P</Name>
+        <Age>39</Age>
+        <Price>500</Price>
+        <Address>
+            <Street>CTC</Street>
+            <City>Cuttack</City>
+            <PostalCode>751480</PostalCode>
+        </Address>  
+    </Customer>
+    <Customer Id="101">
+        <Name>basis</Name>
+        <Age>39</Age>
+        <Price>120</Price>
+        <Address>
+            <Street>Ctc Road</Street>
+            <City>Bhubaneswar</City>
+            <PostalCode>751000</PostalCode>
+        </Address>        
+    </Customer>
+</Customers>
+

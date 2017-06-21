@@ -1,0 +1,25 @@
+{
+  "Customers" : {
+    "Customer" : [ {
+      "id" : 9900,
+      "name" : "P",
+      "age" : 39,
+      "price" : 50000,
+      "Address" : {
+        "Street" : "CTC",
+        "City" : "Cuttack",
+        "Postal Code" : "751480"
+      }
+    }, {
+      "id" : 10100,
+      "name" : "basis",
+      "age" : 39,
+      "price" : 12000,
+      "Address" : {
+        "Street" : "Ctc Road",
+        "City" : "Bhubaneswar",
+        "Postal Code" : "751000"
+      }
+    } ]
+  }
+}
