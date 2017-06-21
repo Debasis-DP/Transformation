@@ -88,6 +88,7 @@ public class JSON_JSON {
        JSON_JSON mainSmooks = new JSON_JSON(smooks_file);
        ExecutionContext executionContext = mainSmooks.smooks.createExecutionContext();
        String outXML = mainSmooks.runSmooksTransform(executionContext,JSON_input); //Indented intermediate XML
+      
        String indentedXML = format(outXML);
        
        System.out.println("______________________Intermediate XML______________________________\n");
