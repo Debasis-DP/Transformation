@@ -54,10 +54,12 @@ public class JSON_XML {
     static Document document;
     
     protected JSON_XML() throws IOException, SAXException, SmooksException {
-        smooks = new Smooks("data/JSON-XML/smooks-config.xml");
+        smooks = new Smooks("data/JSON-XML/smooks-config.xml"); //Smooks file
     }
     
-    protected String runSmooksTransform(ExecutionContext executionContext,byte[] JSON_input) throws IOException,SAXException, SmooksException{
+    //Smooks transformation function JSON to intermediate XML
+    protected String runSmooksTransform(ExecutionContext executionContext,byte[] JSON_input) 
+            throws IOException,SAXException, SmooksException{
         try{
             StringResult result = new StringResult();
             
@@ -70,19 +72,20 @@ public class JSON_XML {
     }
     
     public static void main(String inputJSON_file, String XSLT_file)
-            throws IOException, SAXException, SmooksException,TransformerConfigurationException,TransformerException,ParserConfigurationException {
+            throws IOException, SAXException, SmooksException,TransformerConfigurationException,
+                        TransformerException,ParserConfigurationException {
        
-       byte[] JSON_input = readInputMessage(inputJSON_file); 
+        byte[] JSON_input = readInputMessage(inputJSON_file); //Read from input JSON file
        System.out.println("_______________________Original JSON file_____________________\n");
-       System.out.println(new String(JSON_input));
+       System.out.println(new String(JSON_input));  //Display file content
        System.out.println("______________________________________________________________\n");
        
-       String intermediate_file = "data/JSON-XML/intermediateXML.xml";
+       String intermediate_file = "data/JSON-XML/intermediateXML.xml";  //Intermediate XML file location
        
-       JSON_XML mainSmooks = new JSON_XML();
+       JSON_XML mainSmooks = new JSON_XML();    //New object
        ExecutionContext executionContext = mainSmooks.smooks.createExecutionContext();
-       String out = mainSmooks.runSmooksTransform(executionContext,JSON_input);
-       String indented = format(out);
+       String out = mainSmooks.runSmooksTransform(executionContext,JSON_input); //function for transformation
+       String indented = format(out);   //Indent intermediate XML
        System.out.println("______________________Intermediate XML______________________________\n");
        System.out.println(indented);
        System.out.println("_______________________________________________________________\n");
@@ -92,23 +95,24 @@ public class JSON_XML {
        bufferedWriter_intermediate.write(indented);
        bufferedWriter_intermediate.close();       
           
-       File stylesheet = new File(XSLT_file);
-       File datafile = new File(intermediate_file);
+       File stylesheet = new File(XSLT_file);   //XSLT file
+       File datafile = new File(intermediate_file); //intermediate XML file
        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
        DocumentBuilder builder = factory.newDocumentBuilder();
-       document = builder.parse(datafile);
+       document = builder.parse(datafile);  //Parse XML file
        
         // Use a Transformer for output
        TransformerFactory tFactory = TransformerFactory.newInstance();
-       StreamSource stylesource = new StreamSource(stylesheet);
+       StreamSource stylesource = new StreamSource(stylesheet); //Parse XSLT file
        Transformer transformer = tFactory.newTransformer(stylesource);
+       //Indentation property for output JSON
        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "5");
        
        DOMSource source = new DOMSource(document);
        StringWriter writer = new StringWriter();
        StreamResult result = new StreamResult(writer);
-       transformer.transform(source, result);
+       transformer.transform(source, result);   //Transformation function intermediate XML to final JSON
        StringBuffer sb = writer.getBuffer(); 
        String finalString = sb.toString();
        
@@ -116,12 +120,14 @@ public class JSON_XML {
        System.out.println(finalString);
        System.out.println("=====================================================");
        
+       //Write to file
        BufferedWriter bufferedWriter_out = new BufferedWriter( new FileWriter ("data/JSON-XML/outputXML.xml"));
        bufferedWriter_out.write(finalString);
        bufferedWriter_out.close();       
                     
         
     } // main
+    //Read function
     private static byte[] readInputMessage(String fileName) {
         try {
             return StreamUtils.readStream(new FileInputStream(fileName));
@@ -131,6 +137,7 @@ public class JSON_XML {
         }
     }  
     
+    //Indentation functions
     private static Document parseXmlFile(String in) {
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

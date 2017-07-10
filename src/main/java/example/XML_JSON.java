@@ -30,35 +30,32 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class XML_JSON {
     static Document document;
-
     public static void main(String inputXML_file, String XSLT_file) {
-    
-      
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
         try {
-            File stylesheet = new File("data/XML-JSON/XSLT.xsl");
-            File datafile = new File("data/XML-JSON/inputXML.xml");
-            
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            document = builder.parse(datafile);
-            
-            String inputXML = new String(readInputMessage("data/XML-JSON/inputXML.xml"));
+            File stylesheet = new File(XSLT_file);      //XSLT file
+            File datafile = new File(inputXML_file);    //XML file            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
+            //DocumentBuilderFactory to create new instance of DocumentBuilder
+            DocumentBuilder builder = factory.newDocumentBuilder(); 
+            //DocumentBuilder to parse XML file
+            document = builder.parse(datafile);     //Parse XML file            
+            String inputXML = new String(readInputMessage(inputXML_file)); 
+            //readInputMessage() function reads from a given file location
             System.out.println("========================Input XML=============================");
-            System.out.println(inputXML);
-            System.out.println("==============================================================");
-            
+            System.out.println(inputXML); //Display of input file contents
+            System.out.println("==============================================================");            
             // Use a Transformer for output
             TransformerFactory tFactory = TransformerFactory.newInstance();
-            StreamSource stylesource = new StreamSource(stylesheet);
-            Transformer transformer = tFactory.newTransformer(stylesource);
+            StreamSource stylesource = new StreamSource(stylesheet); //Parse XSLT file
+            Transformer transformer = tFactory.newTransformer(stylesource); 
+            //Create a transformer for the XSLT rule
             
             DOMSource source = new DOMSource(document);
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
-            transformer.transform(source, result);
-            StringBuffer sb = writer.getBuffer(); 
-            String finalString = sb.toString();
+            transformer.transform(source, result); //Transformation function
+            StringBuffer sb = writer.getBuffer(); //Write to buffer
+            String finalString = sb.toString(); //Final output JSON string
                         
            //Indent the output JSON
             ObjectMapper mapper = new ObjectMapper();
@@ -66,9 +63,10 @@ public class XML_JSON {
             String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json); //Indented JSON
             
             System.out.println("=====================Final JSON===============================");
-            System.out.println(indented);
+            System.out.println(indented); //Display indented JSON string
             System.out.println("==============================================================");
             
+            //Write to the output file
             BufferedWriter bufferedWriter_out = new BufferedWriter( new FileWriter ("data/XML-JSON/outputJSON.jsn"));
             bufferedWriter_out.write(indented);
             bufferedWriter_out.close();     
@@ -114,7 +112,7 @@ public class XML_JSON {
         
         }
     } // main
-    private static byte[] readInputMessage(String fileName) {
+    private static byte[] readInputMessage(String fileName) {   //Read from file
         try {
             return StreamUtils.readStream(new FileInputStream(fileName));
         } catch (IOException e) {
